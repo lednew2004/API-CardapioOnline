@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cardápio Online</title>
+    <link rel="stylesheet" href="./style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Quicksand:wght@400;600&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="topbar">
+        <h2 class="titulo-brilhante">Cardápio Online</h2>
+        <button class="btn-carrinho" id="btnCarrinho" aria-label="Abrir carrinho">
+            🛒 <span id="totalItens">0</span>
+        </button>
+    </div>
+
+    <div class="container">
+        <!-- Categorias -->
+        <div id="categorias">
+            <div class="categoria-card" onclick="mostrarCategoria('hamburguer')">
+                <img src="./imgs/burguer.jpeg" alt="Hambúrguer" />
+                <p>Hambúrgueres</p>
+            </div>
+            <div class="categoria-card" onclick="mostrarCategoria('pizza')">
+                <img src="./imgs/pizza.jpeg" alt="Pizza" />
+                <p>Pizzas</p>
+            </div>
+            <div class="categoria-card" onclick="mostrarCategoria('bebida')">
+                <img src="./imgs/bebidas.jpeg" alt="Bebida" />
+                <p>Bebidas</p>
+            </div>
+            <div class="categoria-card" onclick="mostrarCategoria('fritas')">
+                <img src="./imgs/fritas.jpeg" alt="fritas" />
+                <p>Fritas</p>
+            </div>
+        </div>
+
+        <!-- Produtos -->
+        <!-- Produtos -->
+        <div id="produtos">
+            <button class="btn-voltar" onclick="voltarCategorias()">← Voltar ao Menu</button>
+            <div id="produtosLista" class="produtos-lista"></div>
+        </div>
+
+    </div>
+
+    <!-- Carrinho fixo resumo -->
+    <div id="carrinhoResumo" title="Ver carrinho" role="button" tabindex="0" aria-pressed="false"
+        aria-label="Ver carrinho">
+        <span><strong>Itens:</strong> <span id="resumoQtd">0</span></span>
+        <span><strong>Total:</strong> R$ <span id="resumoTotal">0.00</span></span>
+    </div>
+
+    <!-- Modal do Carrinho -->
+    <div id="modalCarrinho" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Seu Pedido</h3>
+                <button class="btn-fechar" onclick="fecharCarrinho()" aria-label="Fechar carrinho">&times;</button>
+            </div>
+            <div class="lista-carrinho" id="listaCarrinho">
+                <!-- Itens adicionados aparecerão aqui -->
+            </div>
+            <div class="total-pedido">
+                Total: R$ <span id="valorTotal">0.00</span>
+            </div>
+            <button class="btn-finalizar" onclick="finalizarPedido()">Finalizar Pedido</button>
+            <button class="btn-voltar" onclick="voltarCategorias()">Voltar</button>
+        </div>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+
+</html>
