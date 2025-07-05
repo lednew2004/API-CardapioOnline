@@ -7,6 +7,13 @@ const produtosData = {
 
 let carrinho = [];
 
+// Captura o número da mesa pela URL (?table=1)
+const urlParams = new URLSearchParams(window.location.search);
+const mesa = urlParams.get("table") || "0"; // Default: 0 se não vier nada
+
+const socket = io("http://localhost:4000");
+
+
 const categoriasEl = document.getElementById("categorias");
 const produtosEl = document.getElementById("produtos");
 const btnCarrinho = document.getElementById("btnCarrinho");
@@ -28,6 +35,7 @@ async function mostrarCategoria(categoria) {
             const response = await fetch('https://api-cardapioonline.onrender.com/cardapio/hamburguers');
             const data = await response.json();
 
+            console.log(data)
             produtosData.hamburguer = data;
 
             data.forEach((item, index) => {
@@ -202,12 +210,31 @@ function finalizarPedido() {
         alert("Adicione algo antes de finalizar o pedido!");
         return;
     }
+
+    const pedido = {
+        mesa: mesa,
+        itens: carrinho.map(item => ({
+            nome: item.nome,
+            qtd: item.qtd,
+            preco: item.preco
+        })),
+        total: carrinho.reduce((acc, i) => acc + i.preco * i.qtd, 0),
+        dataHora: new Date().toISOString()
+    };
+
+    // Aqui futuramente você pode enviar via WebSocket ou API
+    console.log("Pedido enviado:", pedido);
+
+    // Exemplo: envio via WebSocket (quando você ativar)
+    socket.emit("novoPedido", pedido);
+
     alert("Pedido enviado com sucesso! Obrigado 😊");
     carrinho = [];
     atualizarResumo();
     fecharCarrinho();
     voltarCategorias();
 }
+
 
 function voltarCategorias() {
     produtosEl.style.display = "none";

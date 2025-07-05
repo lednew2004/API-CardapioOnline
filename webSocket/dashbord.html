@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Painel de Pedidos 🎯</title>
+    <style>
+        /* Reset básico */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        body {
+            background: #1e1e1e;
+            padding: 1.5rem;
+            color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .titulo-brilhante {
+            position: relative;
+            display: inline-block;
+            font-size: 2.4rem;
+            color: #f2c94c;
+            overflow: hidden;
+            white-space: nowrap;
+            margin-bottom: 1.5rem;
+            user-select: none;
+        }
+
+        .titulo-brilhante::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -75%;
+            height: 100%;
+            width: 50%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: brilhoTexto 2.8s infinite;
+            transform: skewX(-25deg);
+        }
+
+        @keyframes brilhoTexto {
+            0% {
+                left: -75%;
+            }
+
+            100% {
+                left: 125%;
+            }
+        }
+
+        #pedidos {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .pedido {
+            background: #2b2b2b;
+            border-radius: 16px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 6px 15px rgba(242, 201, 76, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: default;
+        }
+
+        .pedido:hover {
+            box-shadow: 0 12px 25px rgba(242, 201, 76, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .pedido-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.7rem;
+            font-weight: 700;
+            color: #f2c94c;
+            user-select: none;
+            font-size: 1.2rem;
+        }
+
+        .itens {
+            list-style: none;
+            padding-left: 1rem;
+            color: #ccc;
+            margin-bottom: 0.8rem;
+        }
+
+        .itens li {
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .total {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #f2c94c;
+            font-style: italic;
+            user-select: none;
+            text-align: right;
+        }
+
+        /* Mensagem quando não tem pedidos */
+        .vazio {
+            color: #aaa;
+            font-style: italic;
+            font-size: 1.1rem;
+            text-align: center;
+            padding: 3rem 0;
+            user-select: none;
+        }
+
+        /* Responsividade */
+        @media (max-width: 520px) {
+            body {
+                padding: 1rem;
+            }
+
+            .titulo-brilhante {
+                font-size: 2rem;
+            }
+
+            #pedidos {
+                max-width: 100%;
+            }
+
+            .pedido-header {
+                font-size: 1rem;
+                flex-direction: column;
+                gap: 0.3rem;
+                align-items: flex-start;
+            }
+
+            .pedido:hover {
+                transform: none;
+                box-shadow: 0 8px 15px rgba(242, 201, 76, 0.4);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="titulo-brilhante">Pedidos</h1>
+    <div id="pedidos" class="vazio">Nenhum pedido ainda...</div>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        const socket = io("http://localhost:4000");
+        const pedidosEl = document.getElementById("pedidos");
+
+        socket.on("connect", () => {
+            console.log("Conectado ao servidor:(painel)", socket.id);
+        });
+
+        socket.on("pedidoRecebido", pedido => {
+            if (pedidosEl.classList.contains("vazio")) {
+                pedidosEl.classList.remove("vazio");
+                pedidosEl.textContent = "";
+            }
+
+            const div = document.createElement("div");
+            div.className = "pedido";
+
+            const header = document.createElement("div");
+            header.className = "pedido-header";
+            header.innerHTML = `
+        <strong>Mesa ${pedido.mesa}</strong>
+        <span>${new Date(pedido.dataHora).toLocaleString()}</span>
+      `;
+
+            const itens = document.createElement("ul");
+            itens.className = "itens";
+            pedido.itens.forEach(i => {
+                const preco = Number(i.preco) || 0;
+                const li = document.createElement("li");
+                li.textContent = `${i.nome} x${i.qtd} – R$ ${preco.toFixed(2)}`;
+                itens.appendChild(li);
+            });
+
+            const total = document.createElement("div");
+            total.className = "total";
+            total.textContent = `Total: R$ ${pedido.total.toFixed(2)}`;
+
+            div.append(header, itens, total);
+            pedidosEl.prepend(div);
+        });
+    </script>
+</body>
+
+</html>
