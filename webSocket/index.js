@@ -2,6 +2,8 @@ const fastify = require("fastify");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("@fastify/cors");
+const dotenv = require("dotenv");
+dotenv.configDotenv();
 
 const app = fastify();
 app.register(cors, {
@@ -33,7 +35,7 @@ io.on("connection", (socket) => {
     });
 });
 
-const PORT = 4000;
+const PORT = process.env.PORT || 1010
 server.listen(PORT, () => {
     console.log(`✅ WebSocket rodando em http://localhost:${PORT}`)
 })
