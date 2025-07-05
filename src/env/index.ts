@@ -3,8 +3,9 @@ import { configDotenv } from "dotenv";
 configDotenv();
 
 const schemaEnv = z.object({
+    DATABASE_CLIENT: z.enum(["sqlite", "pg"]),
     DATABASE_URL: z.string(),
-    PORT: z.number().default(4040)
+    PORT: z.coerce.number().default(4040)
 });
 
 const _env = schemaEnv.safeParse(process.env);
