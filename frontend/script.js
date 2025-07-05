@@ -11,7 +11,7 @@ let carrinho = [];
 const urlParams = new URLSearchParams(window.location.search);
 const mesa = urlParams.get("table") || "0"; // Default: 0 se não vier nada
 
-const socket = io("http://localhost:4000");
+const socket = io("https://server-websocket-9ikx.onrender.com");
 
 
 const categoriasEl = document.getElementById("categorias");
