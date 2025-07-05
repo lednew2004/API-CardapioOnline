@@ -36,6 +36,6 @@ io.on("connection", (socket) => {
 });
 
 const PORT = process.env.PORT || 1010
-server.listen(PORT, () => {
+server.listen({ port: PORT, host: "0.0.0.0" }, () => {
     console.log(`✅ WebSocket rodando em http://localhost:${PORT}`)
 })
