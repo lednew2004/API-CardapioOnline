@@ -25,7 +25,7 @@ async function mostrarCategoria(categoria) {
 
     if (categoria === 'hamburguer') {
         try {
-            const response = await fetch('http://localhost:4040/cardapio/hamburguers');
+            const response = await fetch('https://api-cardapioonline.onrender.com/cardapio/hamburguers');
             const data = await response.json();
 
             produtosData.hamburguer = data;
@@ -52,7 +52,7 @@ async function mostrarCategoria(categoria) {
         }
     } else if (categoria === "pizza") {
         try {
-            const response = await fetch("http://localhost:4040/cardapio/pizzas");
+            const response = await fetch("https://api-cardapioonline.onrender.com/cardapio/pizzas");
             const data = await response.json();
 
             produtosData.pizza = data
@@ -78,7 +78,7 @@ async function mostrarCategoria(categoria) {
         }
     } else if (categoria === "fritas") {
         try {
-            const response = await fetch("http://localhost:4040/cardapio/fritas");
+            const response = await fetch("https://api-cardapioonline.onrender.com/cardapio/fritas");
             const data = await response.json();
 
             produtosData.fritas = data
@@ -104,7 +104,7 @@ async function mostrarCategoria(categoria) {
         }
     } else if (categoria === "bebida") {
         try {
-            const response = await fetch("http://localhost:4040/cardapio/bebidas");
+            const response = await fetch("https://api-cardapioonline.onrender.com/cardapio/bebidas");
             const data = await response.json();
 
             produtosData.bebida = data
